@@ -5,6 +5,10 @@ use revm_by_example::{ forked_db::fork_factory::ForkFactory, * };
 use revm::db::{ CacheDB, EmptyDB };
 use anyhow::ensure;
 
+use revm::precompile::hash::{sha256_run, ripemd160_run };
+use revm::precompile::test_precompile::test_run;
+use revm::primitives::{ B256,  Bytes};
+
 
 
 #[tokio::main]
@@ -119,6 +123,22 @@ async fn main() -> Result<(), anyhow::Error> {
     ensure!(balance == parse_ether(1).unwrap(), "Balance is not 1 WETH: {}", balance);
     println!("Account WETH Balance After New EVM: {}", to_readable(balance, *WETH));
 
+
+    //Added by Rona: testing a precompile
+    let gas_fee: u64 = 90; // Choose any arbitrary number
+    let mut arr: [u8; 64] = [0; 64]; // Set arr to an array of 64 u8 integers, or two u256 integers  
+    arr[31] = 10; // Set a = 10
+    arr[63] = 20; // Set b = 20
+    let bytes_value=Bytes::from(arr); // Convert array to Bytes type
+    let precompile_test_result: Result<(u64, revm::primitives::Bytes), revm::primitives::PrecompileError> = test_run(&bytes_value, gas_fee);
+    match precompile_test_result {
+        Ok((_result, return_bytes)) => {
+            println!("Precompile works, sum is: {}", return_bytes);
+        },
+        Err(e) => {
+            println!("Precompile error: {:?}", e);
+        }
+    }
 
     Ok(())
 }
