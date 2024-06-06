@@ -6,12 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [patch.crates-io]
-revm = { path = "../revm/crates/revm"}
-revme = { path = "../revm/bins/revme"}
-revm-test = { path = "../revm/bins/revm-test"}
-revm-primitives = { path = "../revm/crates/primitives"}
-revm-interpreter = { path = "../revm/crates/interpreter"}
-revm-precompile = { path = "../revm/crates/precompile"}
+revm = { path = "../revm-1/crates/revm"}
+revme = { path = "../revm-1/bins/revme"}
+revm-test = { path = "../revm-1/bins/revm-test"}
+revm-primitives = { path = "../revm-1/crates/primitives"}
+revm-interpreter = { path = "../revm-1/crates/interpreter"}
+revm-precompile = { path = "../revm-1/crates/precompile"}
 
 [dependencies]
 ethers = { version = "2.0.14", features = ["abigen", "ws"] }
