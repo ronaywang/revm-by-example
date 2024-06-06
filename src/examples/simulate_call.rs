@@ -130,17 +130,11 @@ async fn main() -> Result<(), anyhow::Error> {
     arr[31] = 10; // Set a = 10
     arr[63] = 20; // Set b = 20
     let bytes_value=Bytes::from(arr); // Convert array to Bytes type
-    let precompile_test_result: Result<(u64, revm::primitives::Bytes), revm::primitives::PrecompileError> = test_run(&bytes_value, gas_fee);
-    match precompile_test_result {
-        Ok((_result, return_bytes)) => {
-            let sum: U256 = <B256>::try_from(&return_bytes[0..32]).unwrap().into();
-            assert_eq!(sum, U256::from(30));
-            println!("Precompile works, sum is: {}", sum);
-        },
-        Err(e) => {
-            println!("Precompile error: {:?}", e);
-        }
-    }
+    let precompile_test_result = test_run(&bytes_value, gas_fee)?;
+    let bytes_output: Bytes = precompile_test_result.1;
+    let sum: U256 = <B256>::try_from(&bytes_output[0..32]).unwrap().into();           
+    assert_eq!(sum, U256::from(30));
+    println!("Precompile works, sum is: {}", sum);
 
     Ok(())
 }
